@@ -1,0 +1,28 @@
+# Ignorar entorno virtual
+venv/
+
+# Ignorar datos crudos y procesados
+data/raw/
+data/processed/
+
+# Ignorar archivos de resultados
+resultados/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos de Jupyter y otros temporales
+*.ipynb_checkpoints
+.DS_Store
+*.swp
+*.swo
+
+# Archivos de configuración de usuario
+*.env
+*.local
+
+# Otros archivos de sistema
+Thumbs.db 
