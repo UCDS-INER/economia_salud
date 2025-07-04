@@ -9,18 +9,24 @@ import numpy as np
 from pathlib import Path
 from datetime import datetime
 
-def standardize_expedient_number(expedient):
-    """Estandariza el número de expediente eliminando el prefijo '000'."""
+def standardize_expedient_number(expedient, ian):
+    """
+    Si el expediente es igual al IAN (o empieza igual que el IAN), lo deja igual.
+    Si no, agrega el prefijo '000' (si no lo tiene).
+    Siempre devuelve string.
+    """
     if pd.isna(expedient) or expedient == '':
-        return expedient
-    
+        return ''
     expedient_str = str(expedient).strip()
-    
-    # Si empieza con "000", eliminar el prefijo
+    ian_str = str(ian).strip() if not pd.isna(ian) else ''
+    # Si el expediente empieza con el IAN o es igual al IAN, lo dejamos igual
+    if ian_str and (expedient_str == ian_str or expedient_str.startswith(ian_str)):
+        return expedient_str
+    # Si ya empieza con '000', lo dejamos igual
     if expedient_str.startswith('000'):
-        return expedient_str[3:]  # Eliminar los primeros 3 caracteres
-    
-    return expedient_str
+        return expedient_str
+    # Si no, agregamos '000'
+    return '000' + expedient_str
 
 def analyze_and_standardize():
     """Analiza y estandariza los expedientes."""
@@ -43,9 +49,10 @@ def analyze_and_standardize():
     output_file = resultados_path / "estandarizacion_expedientes.txt"
     
     with open(output_file, 'w', encoding='utf-8') as f:
-        f.write("ESTANDARIZACIÓN DE EXPEDIENTES\n")
+        f.write("ESTANDARIZACIÓN DE EXPEDIENTES (NUEVA LÓGICA)\n")
         f.write("="*50 + "\n")
         f.write(f"Fecha de análisis: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        f.write("Lógica aplicada: Si el expediente coincide o empieza con el IAN, se deja igual. Al resto se le agrega '000' como prefijo. Todos los expedientes quedan como string.\n\n")
         
         # 1. Análisis antes de la estandarización
         f.write("1. ANÁLISIS ANTES DE LA ESTANDARIZACIÓN\n")
@@ -96,7 +103,11 @@ def analyze_and_standardize():
         
         # Aplicar estandarización
         df_standardized['n_expediente_hosp_original'] = df_standardized['n_expediente_hosp']
-        df_standardized['n_expediente_hosp'] = df_standardized['n_expediente_hosp'].apply(standardize_expedient_number)
+        df_standardized['n_expediente_hosp'] = df_standardized.apply(
+            lambda row: standardize_expedient_number(row['n_expediente_hosp'], row['ian_expediente_hosp']), axis=1
+        )
+        # Convertir a string explícitamente
+        df_standardized['n_expediente_hosp'] = df_standardized['n_expediente_hosp'].astype(str)
         
         # Contar cambios realizados
         changes_made = (df['n_expediente_hosp'] != df_standardized['n_expediente_hosp']).sum()
