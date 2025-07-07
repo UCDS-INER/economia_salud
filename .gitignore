@@ -25,4 +25,7 @@ __pycache__/
 *.local
 
 # Otros archivos de sistema
-Thumbs.db 
+Thumbs.db
+
+# Backup local
+backup_local/ 
