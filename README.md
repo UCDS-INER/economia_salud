@@ -608,5 +608,5 @@ Este proyecto está bajo la licencia MIT. Ver el archivo [LICENSE](LICENSE) para
 
 **🚀 Proyecto desarrollado por el equipo UCDS-INER para optimización de sistemas hospitalarios**
 
-**📧 Contacto:** [economia.salud@iner.gob.mx](mailto:economia.salud@iner.gob.mx)  
+**📧 Contacto:** [economia.salud@iner.gob.mx](mailto:ciencia.datos.salud@iner.gob.mx)  
 **🌐 Repositorio:** [https://github.com/UCDS-INER/economia_salud](https://github.com/UCDS-INER/economia_salud) 
